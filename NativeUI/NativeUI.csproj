@@ -4,9 +4,10 @@
 		<TargetFramework>net48</TargetFramework>
 		<PlatformTarget>x64</PlatformTarget>
 		<Authors>Guad</Authors>
-		<Version>1.9</Version>
+		<Version>2.0</Version>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageLicenseUrl>https://github.com/Guad/NativeUI/blob/master/LICENSE.md</PackageLicenseUrl>
+		<!--<PackageLicenseFile>LICENSE.md</PackageLicenseFile>-->
 		<PackageProjectUrl>https://github.com/Guad/NativeUI</PackageProjectUrl>
 		<Description>NativeUI is a ScriptHookDotNet based library that helps you quickly and easily build Rockstar-like menus.</Description>
 		<PackageTags>gta gtav shvdn</PackageTags>
@@ -15,7 +16,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="ScriptHookVDotNet3" Version="3.0.2" />
-		<!--<PackageReference Include="ScriptHookVDotNet3" Version="3.0.2" />-->
 	</ItemGroup>
 
 	<ItemGroup>

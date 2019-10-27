@@ -4,14 +4,25 @@
         <TargetFramework>net48</TargetFramework>
         <PlatformTarget>x64</PlatformTarget>
         <Authors>Guad</Authors>
-        <Version>2.0</Version>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageLicenseUrl>https://github.com/Guad/NativeUI/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseUrl>https://github.com/$(GITHUB_REPOSITORY)/blob/master/LICENSE.md</PackageLicenseUrl>
         <!--<PackageLicenseFile>LICENSE.md</PackageLicenseFile>-->
-        <PackageProjectUrl>https://github.com/Guad/NativeUI</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/$(GITHUB_REPOSITORY)</PackageProjectUrl>
         <Description>NativeUI is a ScriptHookDotNet based library that helps you quickly and easily build Rockstar-like menus.</Description>
         <PackageTags>gta gtav shvdn</PackageTags>
         <Copyright>Copyright © 2015</Copyright>
+        <Year>$([System.DateTime]::Now.ToString(yy))</Year>
+        <DayOfYear>$([System.DateTime]::Now.DayOfYear.ToString(000))</DayOfYear>
+        <Month>$([System.DateTime]::Now.ToString(MM))</Month>
+        <Day>$([System.DateTime]::Now.ToString(dd))</Day>
+        <TimeOfDay>$([System.DateTime]::Now.ToString(HHmm))</TimeOfDay>
+        <VersionPrefix>2.0.0</VersionPrefix>
+        <PreReleaseVersionLabel>ci</PreReleaseVersionLabel>
+        <VersionSuffix>$(PreReleaseVersionLabel)-$(Year)$(DayOfYear)$(TimeOfDay)</VersionSuffix>
+        <InformationalVersion>$(VersionPrefix)-$(VersionSuffix)</InformationalVersion>
+        <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+        <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
+        <InformationalVersion Condition=" '$(GITHUB_SHA)' != '' ">$(Version) - Commit Hash: $(GITHUB_SHA)</InformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>

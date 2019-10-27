@@ -4,13 +4,14 @@ using System.IO;
 using System.Reflection;
 using GTA;
 using GTA.Native;
+using GTA.UI;
 
 namespace NativeUI
 {
     public class Sprite
     {
-        public Point Position;
-        public Size Size;
+        public PointF Position;
+        public SizeF Size;
         public Color Color;
         public bool Visible;
         public float Heading;
@@ -38,7 +39,7 @@ namespace NativeUI
         /// <param name="size"></param>
         /// <param name="heading"></param>
         /// <param name="color"></param>
-        public Sprite(string textureDict, string textureName, Point position, Size size, float heading, Color color) //BASE
+        public Sprite(string textureDict, string textureName, PointF position, SizeF size, float heading, Color color) //BASE
         {
             //if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, textureDict))
                 //Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, textureDict, true);
@@ -59,7 +60,7 @@ namespace NativeUI
         /// <param name="textureName"></param>
         /// <param name="position"></param>
         /// <param name="size"></param>
-        public Sprite(string textureDict, string textureName, Point position, Size size) : this(textureDict, textureName, position, size, 0f, Color.FromArgb(255, 255, 255, 255))
+        public Sprite(string textureDict, string textureName, PointF position, SizeF size) : this(textureDict, textureName, position, size, 0f, Color.FromArgb(255, 255, 255, 255))
         {
         }
 
@@ -73,8 +74,8 @@ namespace NativeUI
             if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, TextureDict))
                 Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, TextureDict, true);
 
-                int screenw = Game.ScreenResolution.Width;
-            int screenh = Game.ScreenResolution.Height;
+            int screenw = GTA.UI.Screen.Resolution.Width;
+            int screenh = GTA.UI.Screen.Resolution.Height;
             const float height = 1080f;
             float ratio = (float)screenw/screenh;
             var width = height*ratio;
@@ -93,8 +94,8 @@ namespace NativeUI
             if (!Function.Call<bool>(Hash.HAS_STREAMED_TEXTURE_DICT_LOADED, dict))
                 Function.Call(Hash.REQUEST_STREAMED_TEXTURE_DICT, dict, true);
 
-            int screenw = Game.ScreenResolution.Width;
-            int screenh = Game.ScreenResolution.Height;
+            int screenw = GTA.UI.Screen.Resolution.Width;
+            int screenh = GTA.UI.Screen.Resolution.Height;
             const float height = 1080f;
             float ratio = (float)screenw / screenh;
             var width = height * ratio;
@@ -116,26 +117,30 @@ namespace NativeUI
         /// <param name="size"></param>
         public static void DrawTexture(string path, Point position, Size size, float rotation, Color color)
         {
-            int screenw = Game.ScreenResolution.Width;
-            int screenh = Game.ScreenResolution.Height;
+            int screenw = GTA.UI.Screen.Resolution.Width;
+            int screenh = GTA.UI.Screen.Resolution.Height;
             
             const float height = 1080f;
             float ratio = (float)screenw / screenh;
             float width = height * ratio;
             
-            float reduceX = UI.WIDTH / width;
-            float reduceY = UI.HEIGHT / height;
+            float reduceX = GTA.UI.Screen.Width / width;
+            float reduceY = GTA.UI.Screen.Height / height;
 
-            
             Point extra = new Point(0,0);
             if (screenw == 1914 && screenh == 1052) //TODO: Fix this when ScriptHookVDotNet 1.2 comes out.
                 extra = new Point(15, 0);
 
-            UI.DrawTexture(path, 1, 1, 60,
-                new Point(Convert.ToInt32(position.X*reduceX) + extra.X, Convert.ToInt32(position.Y*reduceY) + extra.Y),
-                new PointF(0f, 0f), 
-                new Size(Convert.ToInt32(size.Width * reduceX), Convert.ToInt32(size.Height * reduceY)),
-                rotation, color);
+            var sprite = new CustomSprite(
+                filename: path,
+                size: new SizeF(size.Width * reduceX, size.Height * reduceY),
+                position: new PointF((position.X * reduceX) + extra.X, (position.Y * reduceY) + extra.Y),
+                color: color,
+                rotation: rotation,
+                centered: true);
+
+            //TODO: Can ScaledDraw be used in place of the logic above?
+            sprite.Draw();
         }
 
         /// <summary>
@@ -146,26 +151,31 @@ namespace NativeUI
         /// <param name="size"></param>
         public static void DrawTexture(string path, Point position, Size size)
         {
-            int screenw = Game.ScreenResolution.Width;
-            int screenh = Game.ScreenResolution.Height;
+            int screenw = GTA.UI.Screen.Resolution.Width;
+            int screenh = GTA.UI.Screen.Resolution.Height;
 
             const float height = 1080f;
             float ratio = (float)screenw / screenh;
             float width = height * ratio;
 
-            float reduceX = UI.WIDTH / width;
-            float reduceY = UI.HEIGHT / height;
+            float reduceX = GTA.UI.Screen.Width / width;
+            float reduceY = GTA.UI.Screen.Height / height;
 
 
             Point extra = new Point(0, 0);
             if (screenw == 1914 && screenh == 1052) //TODO: Fix this when ScriptHookVDotNet 1.2 comes out.
                 extra = new Point(15, 0);
 
-            UI.DrawTexture(path, 1, 1, 60,
-                new Point(Convert.ToInt32(position.X * reduceX) + extra.X, Convert.ToInt32(position.Y * reduceY) + extra.Y),
-                new PointF(0f, 0f),
-                new Size(Convert.ToInt32(size.Width * reduceX), Convert.ToInt32(size.Height * reduceY)),
-                0f, Color.White);
+            var sprite = new CustomSprite(
+                filename: path,
+                size: new SizeF(size.Width * reduceX, size.Height * reduceY),
+                position: new PointF((position.X * reduceX) + extra.X, (position.Y * reduceY) + extra.Y),
+                color: Color.White,
+                rotation: 0f,
+                centered: true);
+
+            //TODO: Can ScaledDraw be used in place of the logic above?
+            sprite.Draw();
         }
 
 

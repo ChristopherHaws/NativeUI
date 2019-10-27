@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using GTA;
 using GTA.Native;
-using Font = GTA.Font;
+using Font = GTA.UI.Font;
 
 namespace NativeUI.PauseMenu
 {
@@ -30,7 +30,7 @@ namespace NativeUI.PauseMenu
         public bool CanLeave { get; set; }
         public bool HideTabs { get; set; }
 
-        internal readonly static string _browseTextLocalized = Game.GetGXTEntry("HUD_INPUT1C");
+        internal readonly static string _browseTextLocalized = Game.GetLocalizedString("HUD_INPUT1C");
 
         public event EventHandler OnMenuClose;
 
@@ -43,12 +43,12 @@ namespace NativeUI.PauseMenu
 
                 if (value)
                 {
-                    Function.Call(Hash._START_SCREEN_EFFECT, "MinigameTransitionIn", 0, true);
+                    Function.Call(Hash.ANIMPOSTFX_PLAY, "MinigameTransitionIn", 0, true);
 
                 }
                 else
                 {
-                    Function.Call(Hash._STOP_SCREEN_EFFECT, "MinigameTransitionIn");
+                    Function.Call(Hash.ANIMPOSTFX_STOP, "MinigameTransitionIn");
                 }
             }
         }
@@ -75,16 +75,16 @@ namespace NativeUI.PauseMenu
             _sc.CallFunction("CREATE_CONTAINER");
 
 
-            _sc.CallFunction("SET_DATA_SLOT", 0, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.PhoneSelect, 0), UIMenu._selectTextLocalized);
-            _sc.CallFunction("SET_DATA_SLOT", 1, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.PhoneCancel, 0), UIMenu._backTextLocalized);
+            _sc.CallFunction("SET_DATA_SLOT", 0, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.PhoneSelect, 0), UIMenu._selectTextLocalized);
+            _sc.CallFunction("SET_DATA_SLOT", 1, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.PhoneCancel, 0), UIMenu._backTextLocalized);
 
-            _sc.CallFunction("SET_DATA_SLOT", 2, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.FrontendRb, 0), "");
-            _sc.CallFunction("SET_DATA_SLOT", 3, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.FrontendLb, 0), _browseTextLocalized);
+            _sc.CallFunction("SET_DATA_SLOT", 2, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.FrontendRb, 0), "");
+            _sc.CallFunction("SET_DATA_SLOT", 3, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.FrontendLb, 0), _browseTextLocalized);
         }
 
         public void DrawInstructionalButton(int slot, Control control, string text)
         {
-            _sc.CallFunction("SET_DATA_SLOT", slot, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)control, 0), text);
+            _sc.CallFunction("SET_DATA_SLOT", slot, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)control, 0), text);
         }
 
         public void ProcessControls()
@@ -92,7 +92,7 @@ namespace NativeUI.PauseMenu
             if (!Visible || TemporarilyHidden) return;
             Function.Call(Hash.DISABLE_ALL_CONTROL_ACTIONS, 0);
 
-            if (Game.IsControlJustPressed(0, Control.PhoneLeft) && FocusLevel == 0)
+            if (Game.IsControlJustPressed(Control.PhoneLeft) && FocusLevel == 0)
             {
                 Tabs[Index].Active = false;
                 Tabs[Index].Focused = false;
@@ -105,7 +105,7 @@ namespace NativeUI.PauseMenu
                 Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
             }
 
-            else if (Game.IsControlJustPressed(0, Control.PhoneRight) && FocusLevel == 0)
+            else if (Game.IsControlJustPressed(Control.PhoneRight) && FocusLevel == 0)
             {
                 Tabs[Index].Active = false;
                 Tabs[Index].Focused = false;
@@ -118,7 +118,7 @@ namespace NativeUI.PauseMenu
                 Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
             }
 
-            else if (Game.IsControlJustPressed(0, Control.FrontendAccept) && FocusLevel == 0)
+            else if (Game.IsControlJustPressed(Control.FrontendAccept) && FocusLevel == 0)
             {
                 if (Tabs[Index].CanBeFocused)
                 {
@@ -136,7 +136,7 @@ namespace NativeUI.PauseMenu
 
             }
 
-            else if (Game.IsControlJustPressed(0, Control.PhoneCancel) && FocusLevel == 1)
+            else if (Game.IsControlJustPressed(Control.PhoneCancel) && FocusLevel == 1)
             {
                 Tabs[Index].Focused = false;
                 FocusLevel = 0;
@@ -144,7 +144,7 @@ namespace NativeUI.PauseMenu
                 Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
             }
 
-            else if (Game.IsControlJustPressed(0, Control.PhoneCancel) && FocusLevel == 0 && CanLeave)
+            else if (Game.IsControlJustPressed(Control.PhoneCancel) && FocusLevel == 0 && CanLeave)
             {
                 Visible = false;
                 Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
@@ -155,7 +155,7 @@ namespace NativeUI.PauseMenu
             if (!HideTabs)
             {
 
-                if (Game.IsControlJustPressed(0, Control.FrontendLb))
+                if (Game.IsControlJustPressed(Control.FrontendLb))
                 {
                     Tabs[Index].Active = false;
                     Tabs[Index].Focused = false;
@@ -170,7 +170,7 @@ namespace NativeUI.PauseMenu
                     Function.Call(Hash.PLAY_SOUND_FRONTEND, -1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1);
                 }
 
-                else if (Game.IsControlJustPressed(0, Control.FrontendRb))
+                else if (Game.IsControlJustPressed(Control.FrontendRb))
                 {
                     Tabs[Index].Active = false;
                     Tabs[Index].Focused = false;
@@ -210,7 +210,7 @@ namespace NativeUI.PauseMenu
             if (!Visible || TemporarilyHidden) return;
             ShowInstructionalButtons();
             Function.Call(Hash.HIDE_HUD_AND_RADAR_THIS_FRAME);
-            Function.Call(Hash._SHOW_CURSOR_THIS_FRAME);
+            Function.Call(Hash._SET_MOUSE_CURSOR_ACTIVE_THIS_FRAME);
 
 
             var res = Screen.ResolutionMaintainRatio;
@@ -272,8 +272,8 @@ namespace NativeUI.PauseMenu
                     activeSize -= 4 * 5;
                     int tabWidth = (int)activeSize / Tabs.Count;
 
-                    Game.EnableControlThisFrame(0, Control.CursorX);
-                    Game.EnableControlThisFrame(0, Control.CursorY);
+                    Game.EnableControlThisFrame(Control.CursorX);
+                    Game.EnableControlThisFrame(Control.CursorY);
 
                     var hovering = Screen.IsMouseInBounds(safe.AddPoints(new Point((tabWidth + 5) * i, 0)),
                         new Size(tabWidth, 40));
@@ -295,7 +295,7 @@ namespace NativeUI.PauseMenu
                             new Size(tabWidth, 10), Color.DodgerBlue).Draw();
                     }
 
-                    if (hovering && Game.IsControlJustPressed(0, Control.CursorAccept) && !Tabs[i].Active)
+                    if (hovering && Game.IsControlJustPressed(Control.CursorAccept) && !Tabs[i].Active)
                     {
                         Tabs[Index].Active = false;
                         Tabs[Index].Focused = false;

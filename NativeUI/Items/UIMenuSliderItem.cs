@@ -129,11 +129,11 @@ namespace NativeUI
         /// <param name="y">New Y position.</param>
         public override void Position(int y)
         {
-            _rectangleBackground.Position = new Point(250 + Offset.X, y + 158 + Offset.Y);
-            _rectangleSlider.Position = new Point(250 + Offset.X, y + 158 + Offset.Y);
-            _rectangleDivider.Position = new Point(323 + Offset.X, y + 153 + Offset.Y);
-            _arrowLeft.Position = new Point(235 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
-            _arrowRight.Position = new Point(400 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
+            _rectangleBackground.Position = new PointF(250 + Offset.X, y + 158 + Offset.Y);
+            _rectangleSlider.Position = new PointF(250 + Offset.X, y + 158 + Offset.Y);
+            _rectangleDivider.Position = new PointF(323 + Offset.X, y + 153 + Offset.Y);
+            _arrowLeft.Position = new PointF(235 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
+            _arrowRight.Position = new PointF(400 + Offset.X + Parent.WidthOffset, 155 + y + Offset.Y);
             
             base.Position(y);
         }
@@ -148,8 +148,8 @@ namespace NativeUI
 
             _arrowLeft.Color = Enabled ? Selected ? Color.Black : Color.WhiteSmoke : Color.FromArgb(163, 159, 148);
             _arrowRight.Color = Enabled ? Selected ? Color.Black : Color.WhiteSmoke : Color.FromArgb(163, 159, 148);
-            int offset = 176 + Offset.X + _rectangleBackground.Size.Width - _rectangleSlider.Size.Width;
-            _rectangleSlider.Position = new Point((int)(offset + (_value / (float)_max * 73)), _rectangleSlider.Position.Y);
+            var offset = 176 + Offset.X + _rectangleBackground.Size.Width - _rectangleSlider.Size.Width;
+            _rectangleSlider.Position = new PointF(offset + (_value / (float)_max * 73), _rectangleSlider.Position.Y);
             if (Selected)
             {
                 _arrowLeft.Draw();

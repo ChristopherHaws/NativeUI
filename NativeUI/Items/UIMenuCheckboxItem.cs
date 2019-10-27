@@ -30,7 +30,7 @@ namespace NativeUI
         public UIMenuCheckboxItem(string text, bool check, string description) : base(text, description)
         {
             const int y = 0;
-            _checkedSprite = new Sprite("commonmenu", "shop_box_blank", new Point(410, y + 95), new Size(50, 50));
+            _checkedSprite = new Sprite("commonmenu", "shop_box_blank", new PointF(410, y + 95), new SizeF(50, 50));
             Checked = check;
         }
 
@@ -48,7 +48,7 @@ namespace NativeUI
         public override void Position(int y)
         {
             base.Position(y);
-            _checkedSprite.Position = new Point(380 + Offset.X + Parent.WidthOffset, y + 138 + Offset.Y);
+            _checkedSprite.Position = new PointF(380 + Offset.X + Parent.WidthOffset, y + 138 + Offset.Y);
         }
         
 
@@ -58,7 +58,7 @@ namespace NativeUI
         public override void Draw()
         {
             base.Draw();
-            _checkedSprite.Position = new Point(380 + Offset.X + Parent.WidthOffset, _checkedSprite.Position.Y);
+            _checkedSprite.Position = new PointF(380 + Offset.X + Parent.WidthOffset, _checkedSprite.Position.Y);
             if (Selected)
             {
                 _checkedSprite.TextureName = Checked ? "shop_box_tickb" : "shop_box_blankb";

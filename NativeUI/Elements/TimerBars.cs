@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using GTA;
-using Font = GTA.Font;
+using GTA.UI;
+using Font = GTA.UI.Font;
 
 namespace NativeUI
 {
@@ -23,9 +23,9 @@ namespace NativeUI
                 UIResText.Alignment.Right, false, false, 0);
             Sprite.Draw("timerbars", "all_black_bg", (int)res.Width - safe.X - 298, (int)res.Height - safe.Y - (40 + (4 * interval)), 300, 37, 0f, Color.FromArgb(180, 255, 255, 255));
 
-            UI.HideHudComponentThisFrame(HudComponent.AreaName);
-            UI.HideHudComponentThisFrame(HudComponent.StreetName);
-            UI.HideHudComponentThisFrame(HudComponent.VehicleName);
+            Hud.HideComponentThisFrame(HudComponent.AreaName);
+            Hud.HideComponentThisFrame(HudComponent.StreetName);
+            Hud.HideComponentThisFrame(HudComponent.VehicleName);
         }
     }
 
@@ -72,10 +72,10 @@ namespace NativeUI
 
             base.Draw(interval);
 
-            var start = new Point((int)res.Width - safe.X - 160, (int)res.Height - safe.Y - (28 + (4 * interval)));
+            var start = new PointF(res.Width - safe.X - 160, res.Height - safe.Y - (28 + (4 * interval)));
 
             UIResRectangle.Draw(start.X, start.Y, 150, 15, BackgroundColor);
-            UIResRectangle.Draw(start.X, start.Y, (int)(150 * Percentage), 15, ForegroundColor);
+            UIResRectangle.Draw(start.X, start.Y, 150 * Percentage, 15, ForegroundColor);
         }
     }
 

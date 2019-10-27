@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using Font = GTA.Font;
+using Font = GTA.UI.Font;
 
 namespace NativeUI
 {
@@ -53,9 +53,9 @@ namespace NativeUI
         /// <param name="y">New Y position.</param>
         public override void Position(int y)
         {
-            _arrowLeft.Position = new Point(300 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
-            _arrowRight.Position = new Point(400 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
-            _itemText.Position = new Point(300 + Offset.X + Parent.WidthOffset, y + 147 + Offset.Y);
+            _arrowLeft.Position = new PointF(300 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
+            _arrowRight.Position = new PointF(400 + Offset.X + Parent.WidthOffset, 147 + y + Offset.Y);
+            _itemText.Position = new PointF(300 + Offset.X + Parent.WidthOffset, y + 147 + Offset.Y);
             base.Position(y);
         }
 
@@ -76,16 +76,16 @@ namespace NativeUI
             _arrowLeft.Color = Enabled ? Selected ? Color.Black : Color.WhiteSmoke : Color.FromArgb(163, 159, 148);
             _arrowRight.Color = Enabled ? Selected ? Color.Black : Color.WhiteSmoke : Color.FromArgb(163, 159, 148);
 
-            _arrowLeft.Position = new Point(375 - (int)offset + Offset.X + Parent.WidthOffset, _arrowLeft.Position.Y);
+            _arrowLeft.Position = new PointF(375 - offset + Offset.X + Parent.WidthOffset, _arrowLeft.Position.Y);
             if (Selected)
             {
                 _arrowLeft.Draw();
                 _arrowRight.Draw();
-                _itemText.Position = new Point(403 + Offset.X + Parent.WidthOffset, _itemText.Position.Y);
+                _itemText.Position = new PointF(403 + Offset.X + Parent.WidthOffset, _itemText.Position.Y);
             }
             else
             {
-                _itemText.Position = new Point(418 + Offset.X + Parent.WidthOffset, _itemText.Position.Y);
+                _itemText.Position = new PointF(418 + Offset.X + Parent.WidthOffset, _itemText.Position.Y);
             }
             _itemText.Draw();
         }

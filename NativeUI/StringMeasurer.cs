@@ -1,5 +1,5 @@
 ﻿using System;
-using GTA;
+using Font = GTA.UI.Font;
 
 namespace NativeUI
 {

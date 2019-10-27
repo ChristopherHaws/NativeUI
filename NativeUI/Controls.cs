@@ -66,17 +66,17 @@ namespace NativeUI
             if (toggle)
             {
                 // Enable all of them
-                Game.EnableAllControlsThisFrame(2);
+                GameEx.EnableAllControlsThisFrame(2);
             }
             // If we don't need them
             else
             {
                 // Disable all of the controls
-                Game.DisableAllControlsThisFrame(2);
+                GameEx.DisableAllControlsThisFrame(2);
 
                 // Now, re-enable the controls that are required for the game
                 // First, pick the right controls for gamepad or keyboard and mouse
-                Control[] list = Game.CurrentInputMode == InputMode.GamePad ? NecessaryControlsGamePad : NecessaryControlsKeyboard;
+                Control[] list = Game.LastInputMethod == InputMethod.GamePad ? NecessaryControlsGamePad : NecessaryControlsKeyboard;
                 // Then, enable all of the controls for that input mode
                 foreach (Control control in list)
                 {

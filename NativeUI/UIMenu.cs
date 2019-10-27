@@ -5,8 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
+using GTA.UI;
 using Control = GTA.Control;
-using Font = GTA.Font;
+using Font = GTA.UI.Font;
 
 namespace NativeUI
 {
@@ -44,7 +45,7 @@ namespace NativeUI
     public class UIMenu
     {
         #region Private Fields
-        private readonly UIContainer _mainMenu;
+        private readonly ContainerElement _mainMenu;
         private readonly Sprite _background;
 
         private readonly UIResRectangle _descriptionBar;
@@ -85,8 +86,8 @@ namespace NativeUI
         private Size DrawWidth { get; set; }
         private bool ReDraw = true;
 
-        internal readonly static string _selectTextLocalized = Game.GetGXTEntry("HUD_INPUT2");
-        internal readonly static string _backTextLocalized = Game.GetGXTEntry("HUD_INPUT3");
+        internal readonly static string _selectTextLocalized = Game.GetLocalizedString("HUD_INPUT2");
+        internal readonly static string _backTextLocalized = Game.GetLocalizedString("HUD_INPUT3");
 
         #endregion
 
@@ -214,7 +215,7 @@ namespace NativeUI
             _instructionalButtonsScaleform = new Scaleform("instructional_buttons");
             UpdateScaleform();
 
-            _mainMenu = new UIContainer(new Point(0, 0), new Size(700, 500), Color.FromArgb(0, 0, 0, 0));
+            _mainMenu = new ContainerElement(new Point(0, 0), new Size(700, 500), Color.FromArgb(0, 0, 0, 0));
             BannerSprite = new Sprite(spriteLibrary, spriteName, new Point(0 + Offset.X, 0 + Offset.Y), new Size(431, 107));
             _mainMenu.Items.Add(Title = new UIResText(title, new Point(215 + Offset.X, 20 + Offset.Y), 1.15f, Color.White, Font.HouseScript, UIResText.Alignment.Centered));
             if (!String.IsNullOrWhiteSpace(subtitle))
@@ -502,7 +503,7 @@ namespace NativeUI
                 _activeItem--;
                 MenuItems[_activeItem % (MenuItems.Count)].Selected = true;
             }
-            Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
+            Audio.PlaySoundFrontend(AUDIO_UPDOWN, AUDIO_LIBRARY);
             IndexChange(CurrentSelection);
         }
 
@@ -516,7 +517,7 @@ namespace NativeUI
             MenuItems[_activeItem % (MenuItems.Count)].Selected = false;
             _activeItem--;
             MenuItems[_activeItem % (MenuItems.Count)].Selected = true;
-            Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
+            Audio.PlaySoundFrontend(AUDIO_UPDOWN, AUDIO_LIBRARY);
             IndexChange(CurrentSelection);
         }
 
@@ -552,7 +553,7 @@ namespace NativeUI
                 _activeItem++;
                 MenuItems[_activeItem % (MenuItems.Count)].Selected = true;
             }
-            Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
+            Audio.PlaySoundFrontend(AUDIO_UPDOWN, AUDIO_LIBRARY);
             IndexChange(CurrentSelection);
         }
 
@@ -566,7 +567,7 @@ namespace NativeUI
             MenuItems[_activeItem % (MenuItems.Count)].Selected = false;
             _activeItem++;
             MenuItems[_activeItem % (MenuItems.Count)].Selected = true;
-            Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
+            Audio.PlaySoundFrontend(AUDIO_UPDOWN, AUDIO_LIBRARY);
             IndexChange(CurrentSelection);
         }
 
@@ -585,7 +586,7 @@ namespace NativeUI
             {
                 var it = (UIMenuListItem)MenuItems[CurrentSelection];
                 it.Index = it.Index - 1;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
                 ListChange(it, it.Index);
                 it.ListChangedTrigger(it.Index);
             }
@@ -594,13 +595,13 @@ namespace NativeUI
                 UIMenuDynamicListItem it = (UIMenuDynamicListItem)MenuItems[CurrentSelection];
                 string newItem = it.Callback(it, UIMenuDynamicListItem.ChangeDirection.Left);
                 it.CurrentListItem = newItem;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
             }
             else if (MenuItems[CurrentSelection] is UIMenuSliderItem)
             {
                 UIMenuSliderItem it = (UIMenuSliderItem)MenuItems[CurrentSelection];
                 it.Value -= it.Multiplier;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
                 SliderChange(it, it.Value);
             }
         }
@@ -620,7 +621,7 @@ namespace NativeUI
             {
                 UIMenuListItem it = (UIMenuListItem)MenuItems[CurrentSelection];
                 it.Index++;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
                 ListChange(it, it.Index);
                 it.ListChangedTrigger(it.Index);
             }
@@ -629,13 +630,13 @@ namespace NativeUI
                 UIMenuDynamicListItem it = (UIMenuDynamicListItem)MenuItems[CurrentSelection];
                 string newItem = it.Callback(it, UIMenuDynamicListItem.ChangeDirection.Right);
                 it.CurrentListItem = newItem;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
             }
             else if (MenuItems[CurrentSelection] is UIMenuSliderItem)
             {
                 UIMenuSliderItem it = (UIMenuSliderItem)MenuItems[CurrentSelection];
                 it.Value += it.Multiplier;
-                Game.PlaySound(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_LEFTRIGHT, AUDIO_LIBRARY);
                 SliderChange(it, it.Value);
             }
         }
@@ -648,20 +649,20 @@ namespace NativeUI
         {
             if (!MenuItems[CurrentSelection].Enabled)
             {
-                Game.PlaySound(AUDIO_ERROR, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_ERROR, AUDIO_LIBRARY);
                 return;
             }
             if (MenuItems[CurrentSelection] is UIMenuCheckboxItem)
             {
                 UIMenuCheckboxItem it = (UIMenuCheckboxItem)MenuItems[CurrentSelection];
                 it.Checked = !it.Checked;
-                Game.PlaySound(AUDIO_SELECT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_SELECT, AUDIO_LIBRARY);
                 CheckboxChange(it, it.Checked);
                 it.CheckboxEventTrigger();
             }
             else
             {
-                Game.PlaySound(AUDIO_SELECT, AUDIO_LIBRARY);
+                Audio.PlaySoundFrontend(AUDIO_SELECT, AUDIO_LIBRARY);
                 ItemSelect(MenuItems[CurrentSelection], CurrentSelection);
                 MenuItems[CurrentSelection].ItemActivate(this);
                 if (!Children.ContainsKey(MenuItems[CurrentSelection])) return;
@@ -677,7 +678,7 @@ namespace NativeUI
         /// </summary>
         public void GoBack()
         {
-            Game.PlaySound(AUDIO_BACK, AUDIO_LIBRARY);
+            Audio.PlaySoundFrontend(AUDIO_BACK, AUDIO_LIBRARY);
             Visible = false;
             if (ParentMenu != null)
             {
@@ -800,7 +801,7 @@ namespace NativeUI
                 if (tmpKeys.Any(Game.IsKeyPressed))
                     return true;
             }
-            if (tmpControls.Any(tuple => Game.IsControlJustPressed(tuple.Item2, tuple.Item1)))
+            if (tmpControls.Any(tuple => Game.IsControlJustPressed(tuple.Item1)))
                 return true;
             return false;
         }
@@ -822,7 +823,7 @@ namespace NativeUI
                 if (tmpKeys.Any(Game.IsKeyPressed))
                     return true;
             }
-            if (tmpControls.Any(tuple => Game.IsControlJustReleased(tuple.Item2, tuple.Item1)))
+            if (tmpControls.Any(tuple => Game.IsControlJustReleased(tuple.Item1)))
                 return true;
             return false;
         }
@@ -854,7 +855,7 @@ namespace NativeUI
                     return true;
                 }
             }
-            if (tmpControls.Any(tuple => Game.IsControlPressed(tuple.Item2, tuple.Item1)))
+            if (tmpControls.Any(tuple => Game.IsControlPressed(tuple.Item1)))
             {
                 _controlCounter = 1;
                 return true;
@@ -890,9 +891,9 @@ namespace NativeUI
             if (count > MaxItemsOnScreen + 1)
                 count = MaxItemsOnScreen + 2;
 
-            _descriptionBar.Position = new Point(Offset.X, 38 * count + _descriptionBar.Position.Y);
-            _descriptionRectangle.Position = new Point(Offset.X, 38 * count + _descriptionRectangle.Position.Y);
-            _descriptionText.Position = new Point(Offset.X + 8, 38 * count + _descriptionText.Position.Y);
+            _descriptionBar.Position = new PointF(Offset.X, 38 * count + _descriptionBar.Position.Y);
+            _descriptionRectangle.Position = new PointF(Offset.X, 38 * count + _descriptionRectangle.Position.Y);
+            _descriptionText.Position = new PointF(Offset.X + 8, 38 * count + _descriptionText.Position.Y);
         }
 
         /// <summary>
@@ -937,10 +938,10 @@ namespace NativeUI
 
             if (_buttonsEnabled)
             {
-                Function.Call(Hash._0x0DF606929C105BE1, _instructionalButtonsScaleform.Handle, 255, 255, 255, 255, 0);
-                UI.HideHudComponentThisFrame(HudComponent.VehicleName);
-                UI.HideHudComponentThisFrame(HudComponent.AreaName);
-                UI.HideHudComponentThisFrame(HudComponent.StreetName);
+                Function.Call(Hash.DRAW_SCALEFORM_MOVIE_FULLSCREEN, _instructionalButtonsScaleform.Handle, 255, 255, 255, 255, 0);
+                Hud.HideComponentThisFrame(HudComponent.VehicleName);
+                Hud.HideComponentThisFrame(HudComponent.AreaName);
+                Hud.HideComponentThisFrame(HudComponent.StreetName);
             }
             // _instructionalButtonsScaleform.Render2D(); // Bug #13
 
@@ -1045,7 +1046,7 @@ namespace NativeUI
             }
 
             Point safezoneOffset = Screen.SafezoneBounds;
-            Function.Call(Hash._SHOW_CURSOR_THIS_FRAME);
+            Function.Call(Hash._SET_MOUSE_CURSOR_ACTIVE_THIS_FRAME);
             int limit = MenuItems.Count - 1;
             int counter = 0;
             if (MenuItems.Count > MaxItemsOnScreen + 1)
@@ -1054,16 +1055,16 @@ namespace NativeUI
             if (Screen.IsMouseInBounds(new Point(0, 0), new Size(30, 1080)) && MouseEdgeEnabled)
             {
                 GameplayCamera.RelativeHeading += 5f;
-                Function.Call(Hash._0x8DB8CFFD58B62552, 6);
+                Function.Call(Hash._SET_MOUSE_CURSOR_SPRITE, 6);
             }
             else if (Screen.IsMouseInBounds(new Point(Convert.ToInt32(Screen.ResolutionMaintainRatio.Width - 30f), 0), new Size(30, 1080)) && MouseEdgeEnabled)
             {
                 GameplayCamera.RelativeHeading -= 5f;
-                Function.Call(Hash._0x8DB8CFFD58B62552, 7);
+                Function.Call(Hash._SET_MOUSE_CURSOR_SPRITE, 7);
             }
             else if (MouseEdgeEnabled)
             {
-                Function.Call(Hash._0x8DB8CFFD58B62552, 1);
+                Function.Call(Hash._SET_MOUSE_CURSOR_SPRITE , 1);
             }
 
             for (int i = _minItem; i <= limit; i++)
@@ -1081,9 +1082,9 @@ namespace NativeUI
                         safezoneOffset);
                     if (uiMenuItem.Hovered && res == 1 && MenuItems[i] is IListItem)
                     {
-                        Function.Call(Hash._0x8DB8CFFD58B62552, 5);
+                        Function.Call(Hash._SET_MOUSE_CURSOR_SPRITE , 5);
                     }
-                    if (Game.IsControlJustPressed(0, Control.Attack))
+                    if (Game.IsControlJustPressed(Control.Attack))
                         if (uiMenuItem.Selected && uiMenuItem.Enabled)
                         {
                             if (MenuItems[i] is IListItem &&
@@ -1106,13 +1107,13 @@ namespace NativeUI
                         else if (!uiMenuItem.Selected)
                         {
                             CurrentSelection = i;
-                            Game.PlaySound(AUDIO_UPDOWN, AUDIO_LIBRARY);
+                            Audio.PlaySoundFrontend(AUDIO_UPDOWN, AUDIO_LIBRARY);
                             IndexChange(CurrentSelection);
                             UpdateScaleform();
                         }
                         else if (!uiMenuItem.Enabled && uiMenuItem.Selected)
                         {
-                            Game.PlaySound(AUDIO_ERROR, AUDIO_LIBRARY);
+                            Audio.PlaySoundFrontend(AUDIO_ERROR, AUDIO_LIBRARY);
                         }
                 }
                 else
@@ -1125,7 +1126,7 @@ namespace NativeUI
             if (Screen.IsMouseInBounds(new Point(extraX, extraY), new Size(431 + WidthOffset, 18)))
             {
                 _extraRectangleUp.Color = Color.FromArgb(255, 30, 30, 30);
-                if (Game.IsControlJustPressed(0, Control.Attack))
+                if (Game.IsControlJustPressed(Control.Attack))
                 {
                     if (Size > MaxItemsOnScreen + 1)
                         GoUpOverflow();
@@ -1139,7 +1140,7 @@ namespace NativeUI
             if (Screen.IsMouseInBounds(new Point(extraX, extraY + 18), new Size(431 + WidthOffset, 18)))
             {
                 _extraRectangleDown.Color = Color.FromArgb(255, 30, 30, 30);
-                if (Game.IsControlJustPressed(0, Control.Attack))
+                if (Game.IsControlJustPressed(Control.Attack))
                 {
                     if (Size > MaxItemsOnScreen + 1)
                         GoDownOverflow();
@@ -1228,8 +1229,8 @@ namespace NativeUI
             _instructionalButtonsScaleform.CallFunction("CREATE_CONTAINER");
 
 
-            _instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 0, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.PhoneSelect, 0), _selectTextLocalized);
-            _instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 1, Function.Call<string>(Hash._0x0499D7B09FC9B407, 2, (int)Control.PhoneCancel, 0), _backTextLocalized);
+            _instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 0, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.PhoneSelect, 0), _selectTextLocalized);
+            _instructionalButtonsScaleform.CallFunction("SET_DATA_SLOT", 1, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 2, (int)Control.PhoneCancel, 0), _backTextLocalized);
             int count = 2;
             foreach (var button in _instructionalButtons.Where(button => button.ItemBind == null || MenuItems[CurrentSelection] == button.ItemBind))
             {
@@ -1262,7 +1263,7 @@ namespace NativeUI
                 if (ParentMenu != null || !value) return;
                 if (!ResetCursorOnOpen) return;
                 Cursor.Position = new Point(System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 2, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 2);
-                Function.Call(Hash._0x8DB8CFFD58B62552, 1);
+                Function.Call(Hash._SET_MOUSE_CURSOR_SPRITE , 1);
             }
         }
 
@@ -1295,7 +1296,7 @@ namespace NativeUI
         /// <summary>
         /// Returns false if last input was made with mouse and keyboard, true if it was made with a controller.
         /// </summary>
-        public static bool IsUsingController => !Function.Call<bool>(Hash._GET_LAST_INPUT_METHOD, 2);
+        public static bool IsUsingController => !Function.Call<bool>(Hash._IS_INPUT_DISABLED, 2);
 
 
         /// <summary>

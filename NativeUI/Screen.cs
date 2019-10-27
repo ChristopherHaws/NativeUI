@@ -18,8 +18,8 @@ namespace NativeUI
             get
             {
                 // Get the game width and height
-                int screenw = Game.ScreenResolution.Width;
-                int screenh = Game.ScreenResolution.Height;
+                int screenw = GTA.UI.Screen.Resolution.Width;
+                int screenh = GTA.UI.Screen.Resolution.Height;
                 // Calculate the ratio
                 float ratio = (float)screenw / screenh;
                 // And the width with that ratio
@@ -44,8 +44,8 @@ namespace NativeUI
                 g = 10 - g;
 
                 // Then, get the screen resolution
-                int screenw = Game.ScreenResolution.Width;
-                int screenh = Game.ScreenResolution.Height;
+                int screenw = GTA.UI.Screen.Resolution.Width;
+                int screenh = GTA.UI.Screen.Resolution.Height;
                 // Calculate the ratio
                 float ratio = (float)screenw / screenh;
                 // And this thing (that I don't know what it does)
@@ -83,10 +83,10 @@ namespace NativeUI
         /// <param name="font">Game font used for measurements.</param>
         /// <param name="scale">The scale of the characters.</param>
         /// <returns>The width of the string based on the font and scale.</returns>
-        public static float GetTextWidth(string text, GTA.Font font, float scale)
+        public static float GetTextWidth(string text, GTA.UI.Font font, float scale)
         {
             // Start by requesting the game to start processing a width measurement
-            Function.Call(Hash._SET_TEXT_ENTRY_FOR_WIDTH, "CELL_EMAIL_BCON"); // _BEGIN_TEXT_COMMAND_WIDTH
+            Function.Call(Hash._BEGIN_TEXT_COMMAND_GET_WIDTH, "CELL_EMAIL_BCON"); // _BEGIN_TEXT_COMMAND_WIDTH
             // Add the text string
             UIResText.AddLongString(text);
 
@@ -95,7 +95,7 @@ namespace NativeUI
             Function.Call(Hash.SET_TEXT_SCALE, 1f, scale);
 
             // Ask the game for the relative string width
-            float width = Function.Call<float>(Hash._GET_TEXT_SCREEN_WIDTH, true);
+            float width = Function.Call<float>(Hash._END_TEXT_COMMAND_GET_WIDTH, true);
             // And return the literal result
             return ResolutionMaintainRatio.Width * width;
 
@@ -108,10 +108,10 @@ namespace NativeUI
         /// <param name="position">The position of the text.</param>
         /// <param name="font">The font to use.</param>
         /// <returns>The number of lines used.</returns>
-        public static int GetLineCount(string text, Point position, GTA.Font font, float scale, int wrap)
+        public static int GetLineCount(string text, PointF position, GTA.UI.Font font, float scale, int wrap)
         {
             // Tell the game that we are going to request the number of lines
-            Function.Call(Hash._SET_TEXT_GXT_ENTRY, "CELL_EMAIL_BCON"); // _BEGIN_TEXT_COMMAND_LINE_COUNT
+            Function.Call(Hash._BEGIN_TEXT_COMMAND_LINE_COUNT, "CELL_EMAIL_BCON"); // _BEGIN_TEXT_COMMAND_LINE_COUNT
             // Add the text that has been sent to us
             UIResText.AddLongStringForUtf8(text); // ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME
 
@@ -136,7 +136,7 @@ namespace NativeUI
             }
 
             // Finally, return the number of lines being made by the string
-            return Function.Call<int>(Hash._0x9040DFB09BE75706, x, y); // _GET_TEXT_SCREEN_LINE_COUNT
+            return Function.Call<int>(Hash._END_TEXT_COMMAND_LINE_COUNT, x, y);
         }
     }
 }

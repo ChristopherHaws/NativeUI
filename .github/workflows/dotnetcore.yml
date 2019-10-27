@@ -28,4 +28,4 @@ jobs:
       run: nuget sources add -name "GitHub" -Source "https://nuget.pkg.github.com/${{ github.actor }}/index.json" -Username ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push generated package to GitHub registry
-      run: nuget push .\dist\*.nupkg -Source "GitHub" -SkipDuplicate
+      run: nuget push .\dist\*.nupkg -Source "GitHub" -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}

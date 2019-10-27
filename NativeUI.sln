@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "NativeUI\NativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeUI", "NativeUI\NativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuExample", "MenuExample\MenuExample.csproj", "{79D9A09F-1999-4148-9BA0-20AEBA9B3C8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuExample", "MenuExample\MenuExample.csproj", "{79D9A09F-1999-4148-9BA0-20AEBA9B3C8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{13F3F6B6-1AB0-4D9B-8BB7-268B28529089}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{13B2C88F-FD17-4026-AFA0-2C1233485B91}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{13B2C88F-FD17-4026-AFA0-2C1233485B91} = {13F3F6B6-1AB0-4D9B-8BB7-268B28529089}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1BA46FF0-4684-4604-B634-22340B419DF3}

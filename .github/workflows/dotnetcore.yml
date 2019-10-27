@@ -1,4 +1,4 @@
-name: .NET Core
+name: CI
 
 on: [push]
 
@@ -10,22 +10,22 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Setup .NET Core
+    - name: setup dotnet
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 2.2.108
+        dotnet-version: 3.0.100
 
-    - name: Build with dotnet
+    - name: dotnet build
       run: dotnet build --configuration Release
 
-    - name: Generate NuGet Packages
+    - name: dotnet pack
       run: dotnet pack -c Release -o dist
 
-    - name: Install NuGet client
+    - name: setup nuget
       uses: warrenbuckley/Setup-Nuget@v1
 
-    - name: Add private GitHub registry to NuGet
-      run: nuget sources add -name "GitHub" -Source "https://nuget.pkg.github.com/${{ github.actor }}/index.json" -Username ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }}
+    - name: nuget sources add
+      run: nuget sources add -name "GPR" -Source "https://nuget.pkg.github.com/${{ github.actor }}/index.json" -Username ${{ github.actor }} -Password ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Push generated package to GitHub registry
-      run: nuget push .\dist\*.nupkg -Source "GitHub" -SkipDuplicate -ApiKey ${{ secrets.GITHUB_TOKEN }}
+    - name: nuget push
+      run: nuget push .\dist\*.nupkg -Source "GPR" -SkipDuplicate
